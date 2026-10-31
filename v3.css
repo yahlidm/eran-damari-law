@@ -54,7 +54,8 @@ a{color:inherit}
 .nav-links a:hover{background:rgba(var(--tint),.08);color:var(--text)}
 .nav-links a.hot{color:var(--text);display:inline-flex;align-items:center;gap:7px}
 .nav-links a.hot::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--a2);box-shadow:0 0 0 4px rgba(var(--a-rgb),.18)}
-.nav-end{display:flex;align-items:center;gap:10px}
+.nav-end{display:flex;align-items:center;gap:10px;order:-1}
+.nav .brand{order:2}
 
 /* hero */
 .hero{position:relative;min-height:100svh;overflow:hidden}
@@ -91,7 +92,7 @@ a{color:inherit}
 .world-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(270deg,rgba(11,10,10,.55) 18%,transparent 55%),linear-gradient(0deg,var(--bg) 0,transparent 16%),linear-gradient(180deg,var(--bg) 0,transparent 14%)}
 .still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:30% 60%}
 /* a way out of the walk, shown only while inside it */
-.skip{position:absolute;z-index:4;bottom:32px;inset-inline-end:32px;display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:999px;
+.skip{position:absolute;z-index:4;bottom:88px;inset-inline-end:32px;display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:999px;
   font-size:14px;font-weight:600;color:var(--text);text-decoration:none;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px);
   transition:opacity .5s var(--ease-out),transform .5s var(--ease-out),visibility 0s linear .5s,background var(--dur)}
 .skip svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -134,7 +135,7 @@ a{color:inherit}
 .tile.wide .t-go{grid-column:3;grid-row:1 / span 2;margin:0}
 
 /* successes and press, with the practice areas beside them */
-.wins-grid{display:grid;grid-template-columns:1.65fr 1fr;gap:18px;margin-top:34px;align-items:start}
+.wins-grid{display:grid;grid-template-columns:1.9fr 1fr;gap:18px;margin-top:34px;align-items:start}
 .wins{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .win{padding:22px;border-radius:22px;display:flex;flex-direction:column;gap:8px}
 .win .yr{align-self:flex-start;font-size:12.5px;font-weight:700;color:var(--a3);padding:5px 10px;border-radius:999px;background:rgba(var(--a-rgb),.12);border:1px solid rgba(var(--a-rgb),.28)}
@@ -150,7 +151,10 @@ a.win{text-decoration:none;color:var(--text);transition:transform .45s var(--eas
 .via svg,.m-list svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 a.win:hover .via{color:var(--text)}
 /* the press: one panel, one row each */
-.win.media{grid-column:1 / -1;padding:22px 22px 10px}
+.win.media{padding:22px 22px 10px}
+.win.feature.alt{background:linear-gradient(160deg,rgba(var(--tint),.07),rgba(var(--tint),.02));border-color:var(--border)}
+.big-line{font-size:18px!important;font-weight:700;color:var(--text)!important}
+.big-line .num{color:var(--a2);font-weight:900;font-size:1.25em}
 .win.media h3{font-size:20px;margin:0 0 6px}
 .m-list{list-style:none;margin:0;padding:0}
 .m-list li+li{border-top:1px solid var(--border)}
@@ -160,7 +164,7 @@ a.win:hover .via{color:var(--text)}
 .m-yr{font-size:13px;color:var(--dim)}
 .m-list a svg{color:var(--dim);transition:color var(--dur),transform var(--dur) var(--ease-out)}
 .m-list a:hover svg{color:var(--a2);transform:translate(-2px,-2px)}
-.win.feature{grid-column:1 / -1;padding:28px;background:linear-gradient(160deg,rgba(var(--a-rgb),.26),rgba(var(--a-rgb),.05)),rgba(var(--tint),.03);border-color:rgba(var(--a-rgb),.4)}
+.win.feature{padding:28px;background:linear-gradient(160deg,rgba(var(--a-rgb),.26),rgba(var(--a-rgb),.05)),rgba(var(--tint),.03);border-color:rgba(var(--a-rgb),.4)}
 .win.feature h3{font-size:clamp(26px,2.4vw,34px)}
 .win blockquote{margin:6px 0 4px;font-size:clamp(22px,2vw,28px);font-weight:800;letter-spacing:-.015em;line-height:1.25}
 .win cite{display:block;margin-top:8px;font-style:normal;font-size:14px;font-weight:500;color:var(--text2)}
@@ -183,6 +187,47 @@ a.win:hover .via{color:var(--text)}
 .areas-side .tile li+li::before{content:"·";display:inline;width:auto;height:auto;background:none;margin:0 5px;color:var(--dim2)}
 .areas-side .t-go{grid-column:3;grid-row:1 / span 2;margin:0;font-size:0;gap:0}
 .areas-side .t-go svg{width:18px;height:18px}
+
+/* lead form: a pill bottom-left that opens a small card; on a phone it lives in the dock and opens as a sheet */
+.leadbox{position:fixed;inset-inline-end:24px;bottom:24px;z-index:35}
+.lead-pill{position:relative;display:inline-flex;align-items:center;gap:12px;min-height:60px;padding:8px 24px 8px 10px;padding-inline-start:8px;border-radius:999px;cursor:pointer;
+  border:1px solid rgba(var(--a-rgb),.5);color:var(--text);font-family:inherit;text-align:start;
+  background:linear-gradient(135deg,rgba(var(--a-rgb),.28),rgba(var(--a-rgb),.08) 60%),rgba(16,14,14,.82);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 16px 46px rgba(0,0,0,.5),0 0 0 6px rgba(var(--a-rgb),.08);
+  transition:transform .35s var(--ease-out),box-shadow .35s var(--ease-out),border-color .3s}
+.lp-ico{position:relative;flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--a);box-shadow:0 8px 24px rgba(var(--a-rgb),.55)}
+.lp-ico::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid rgba(var(--a-rgb),.55);animation:lpRing 2.8s var(--ease-out) infinite}
+@keyframes lpRing{0%{transform:scale(.85);opacity:.9}70%,100%{transform:scale(1.35);opacity:0}}
+.reduced .lp-ico::after{animation:none;opacity:0}
+.lead-pill svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lp-t{display:grid;gap:2px;font-size:17px;font-weight:800;letter-spacing:-.01em;line-height:1.15}
+.lp-t small{font-size:12.5px;font-weight:500;color:var(--text2);letter-spacing:0}
+.lead-pill:hover{transform:translateY(-2px);border-color:var(--a2);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 20px 54px rgba(0,0,0,.55),0 0 0 8px rgba(var(--a-rgb),.12)}
+.lead-pill:active{transform:scale(.97)}
+.leadbox.open .lead-pill{opacity:0;pointer-events:none}
+.lead-card{position:absolute;inset-inline-end:0;bottom:0;width:340px;padding:22px;border-radius:24px;background:rgba(16,14,14,.9);box-shadow:0 24px 70px rgba(0,0,0,.6);
+  transform-origin:bottom left;animation:leadIn .35s var(--ease-out)}
+@keyframes leadIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+.reduced .lead-card{animation:none}
+.lead-x{position:absolute;inset-inline-start:10px;top:10px;width:40px;height:40px;border-radius:999px;border:0;background:transparent;color:var(--text2);cursor:pointer;display:grid;place-items:center}
+.lead-x svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.lead-x:hover{background:rgba(var(--tint),.08);color:var(--text)}
+.lead-t{margin:0;font-size:22px;font-weight:800;letter-spacing:-.02em}
+.lead-s{margin:4px 0 14px;color:var(--text2);font-size:14px}
+.leadbox form{display:grid;gap:10px}
+.leadbox label{display:grid;gap:5px;font-size:13px;font-weight:600;color:var(--text2)}
+.leadbox label small{font-weight:400;color:var(--dim)}
+.leadbox input,.leadbox select,.leadbox textarea{width:100%;box-sizing:border-box;min-height:44px;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:rgba(var(--tint),.05);
+  color:var(--text);font-family:inherit;font-size:16px;transition:border-color var(--dur),background var(--dur)}
+.leadbox textarea{resize:vertical;min-height:64px}
+.leadbox select option{background:#141212;color:var(--text)}
+.leadbox input:focus,.leadbox select:focus,.leadbox textarea:focus{outline:none;border-color:rgba(var(--a-rgb),.7);background:rgba(var(--tint),.08)}
+.leadbox [aria-invalid="true"]{border-color:var(--a2)}
+.lead-err{margin:0;font-size:13px;color:var(--a3)}
+.leadbox .cta{justify-content:center;margin-top:4px}
+.lead-note{margin:0;font-size:12px;color:var(--dim);line-height:1.5}
+.lead-dock{display:none}
 
 /* the Ashdod case: the standout section. Pill, big title, the numbers, a timeline from the press, the quote, the sources */
 .case{background:radial-gradient(ellipse 70% 55% at 85% 10%,rgba(var(--a-rgb),.2),transparent 70%),radial-gradient(ellipse 50% 40% at 10% 90%,rgba(var(--a-rgb),.1),transparent 70%)}
@@ -362,9 +407,15 @@ body{animation:pageIn 1.9s var(--ease-lux) both}
   .brand-t{display:none}
   .social.tiny{gap:4px}
   .social.tiny a{width:40px;height:40px}
-  .hero-bg img{width:100%;height:74%;object-position:50% 12%}
-  .hero-bg::after{background:linear-gradient(0deg,var(--bg) 33%,rgba(11,10,10,.78) 47%,rgba(11,10,10,0) 70%)}
-  .hero-inner{justify-content:flex-end;padding:0 16px calc(100px + env(safe-area-inset-bottom))}
+  .hero-bg img{width:100%;height:58svh;object-position:50% 8%}
+  .hero-bg::after{background:linear-gradient(0deg,var(--bg) 42%,rgba(11,10,10,.6) 47%,rgba(11,10,10,0) 54%)}
+  .hero-inner{justify-content:flex-start;padding:calc(55svh - 8px) 16px calc(100px + env(safe-area-inset-bottom))}
+  .hero .panel{background:transparent;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;padding:0;margin-top:12px}
+  .hero .lead{font-size:15px;line-height:1.5;margin-bottom:14px}
+  /* the line above the headline sits on the photo's edge: give it its own dark glass so it reads */
+  .hero .kicker{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;margin-bottom:12px;padding:7px 13px;border-radius:999px;font-size:13.5px;font-weight:600;color:var(--text);
+    background:rgba(14,12,12,.78);border:1px solid var(--border);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .hero .kicker::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--a2)}
   .hero .h1{font-size:clamp(36px,10.6vw,46px)}
   .hero .panel{margin-top:16px;padding:18px}
   .lead{font-size:16px}
@@ -414,9 +465,15 @@ body{animation:pageIn 1.9s var(--ease-lux) both}
   .card .addr-h{font-size:30px}
   .final{padding:52px 20px}
   .foot{padding-bottom:110px}
-  .dock{display:grid;grid-template-columns:1.5fr 1fr;gap:8px;position:fixed;inset-inline:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:30;padding:7px;border-radius:999px;background:rgba(14,12,12,.78)}
+  .dock{display:grid;grid-template-columns:1.2fr 1.35fr auto;gap:8px;position:fixed;inset-inline:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:30;padding:8px;border-radius:999px;background:rgba(14,12,12,.78)}
   .dock a{justify-content:center}
   .dock .call{padding:11px 14px;font-size:15px}
+  .lead-pill{display:none}
+  .leadbox{inset-inline:12px;bottom:calc(76px + env(safe-area-inset-bottom))}
+  .lead-card{position:relative;width:auto;max-height:calc(100svh - 120px);overflow:auto}
+  .lead-dock{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:48px;border-radius:999px;border:1px solid rgba(var(--a-rgb),.55);background:linear-gradient(135deg,rgba(var(--a-rgb),.26),rgba(var(--a-rgb),.08));color:var(--text);font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;padding:0 12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+  .lead-dock svg{width:17px;height:17px;fill:none;stroke:var(--a2);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .dock .wa{min-height:48px}
 }
 
 /* short phones (iPhone SE and smaller): the opening fits under the photo */

@@ -58,11 +58,10 @@ function still() {
   const img = new Image(); img.className = 'still'; img.alt = ''; img.src = 'img/court-still.jpg';
   canvas.replaceWith(img); cards.forEach(c => c.classList.add('on'));
 }
-// the section sits right under the first screen, so "near" means: the reader has started down, or the page has been idle a while
+// the 3D sits further down the page: it loads when its section comes within two screens
 let loading = false;
 async function load() {
   if (loading) return; loading = true;
-  removeEventListener('scroll', onScrollLoad);
   try {
     const t = document.createElement('canvas'); if (!(t.getContext('webgl2') || t.getContext('webgl'))) throw new Error('no webgl');
     const m = await import('./court.js');
@@ -71,9 +70,7 @@ async function load() {
     world.setProgress(checkP);
   } catch (err) { console.warn('3D unavailable, the page stays readable', err); still(); }
 }
-const onScrollLoad = () => { if (scrollY > innerHeight * 0.2) load(); };
-addEventListener('scroll', onScrollLoad, { passive: true });
-addEventListener('load', () => setTimeout(load, 2500), { once: true });
+new IntersectionObserver((es, io) => { if (es.some(e => e.isIntersecting)) { io.disconnect(); load(); } }, { rootMargin: '200% 0px' }).observe(check);
 if (ScrollTrigger) {
   // progress runs while the stage is pinned (sticky): 0 when the section reaches the top, 1 when it leaves
   ScrollTrigger.create({ trigger: check, start: 'top top', end: 'bottom bottom', onToggle: s => check.classList.toggle('inside', s.isActive), onUpdate: s => { checkP = s.progress; world && world.setProgress(checkP); lightCards(checkP); } });
@@ -115,6 +112,35 @@ const player = $('.player'), clip = $('.player video');
 $('.player .play').addEventListener('click', () => { clip.controls = true; clip.play(); });
 clip.addEventListener('play', () => player.classList.add('playing'));
 clip.addEventListener('ended', () => { player.classList.remove('playing'); clip.controls = false; clip.currentTime = 0; });
+
+// ── lead form: opens from the pill (desktop) or the dock (phone), checks name and phone, hands the details to WhatsApp ──
+const lead = $('#lead'), card = $('#lead-card'), leadForm = $('#lead form'), leadErr = $('.lead-err'), leadDone = $('.lead-done');
+const openers = $$('[data-lead-open]');
+function leadOpen() {
+  card.hidden = false; lead.classList.add('open'); leadForm.hidden = false; leadDone.hidden = true;
+  openers.forEach(o => o.setAttribute('aria-expanded', 'true'));
+  setTimeout(() => leadForm.querySelector('[name="name"]').focus(), 50);
+}
+function leadClose() {
+  card.hidden = true; lead.classList.remove('open');
+  openers.forEach(o => o.setAttribute('aria-expanded', 'false'));
+}
+openers.forEach(o => o.addEventListener('click', () => (card.hidden ? leadOpen() : leadClose())));
+$('.lead-x').addEventListener('click', leadClose);
+addEventListener('keydown', e => { if (e.key === 'Escape' && !card.hidden) leadClose(); });
+leadForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const f = leadForm.elements, name = f.name.value.trim(), phone = f.phone.value.replace(/[\s-]/g, '');
+  const badName = name.length < 2, badPhone = !/^(\+972|0)\d{8,9}$/.test(phone);
+  f.name.setAttribute('aria-invalid', badName); f.phone.setAttribute('aria-invalid', badPhone);
+  leadErr.hidden = !(badName || badPhone);
+  if (badName || badPhone) { (badName ? f.name : f.phone).focus(); return; }
+  const lines = [`שלום עו״ד דמרי, שמי ${name}`, `טלפון: ${phone}`];
+  if (f.topic.value) lines.push(`נושא: ${f.topic.value}`);
+  if (f.msg.value.trim()) lines.push(f.msg.value.trim());
+  window.open('https://wa.me/972522649161?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener');
+  leadForm.hidden = true; leadDone.hidden = false; leadForm.reset();
+});
 
 // ── copy the address ──
 $$('[data-copy]').forEach(b => b.addEventListener('click', async () => {
