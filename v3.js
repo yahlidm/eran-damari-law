@@ -110,6 +110,12 @@ $$('.faq details').forEach(d => {
   });
 });
 
+// ── the TV clip: plays only when tapped, with the browser's own controls from then on ──
+const player = $('.player'), clip = $('.player video');
+$('.player .play').addEventListener('click', () => { clip.controls = true; clip.play(); });
+clip.addEventListener('play', () => player.classList.add('playing'));
+clip.addEventListener('ended', () => { player.classList.remove('playing'); clip.controls = false; clip.currentTime = 0; });
+
 // ── copy the address ──
 $$('[data-copy]').forEach(b => b.addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(b.dataset.copy); const t = b.textContent; b.textContent = 'הכתובת הועתקה'; setTimeout(() => (b.textContent = t), 1800); } catch {}
